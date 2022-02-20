@@ -17,8 +17,20 @@ function addTodo(e) {
     showAlert("danger", "Add any todo!");
   } else {
     addUI(todo);
-    showAlert("success", "Todo added successfully!")
+    addStorage(todo);
+    showAlert("success", "Todo added successfully!");
   }
+}
+
+//create alert messages
+function showAlert(type, message) {
+  const alert = document.createElement("div");
+  alert.className = `alert alert-${type}`;
+  alert.textContent = message;
+  firstBody.appendChild(alert);
+  setTimeout(function () {
+    alert.remove();
+  }, 1000);
 }
 
 //Add todo to ui
@@ -34,14 +46,21 @@ function addUI(todo) {
   input.value = "";
 }
 
-//create alert messages
-function showAlert(type, message){
-  const alert = document.createElement("div");
-  alert.className = `alert alert-${type}`;
-  alert.textContent = message;
-  firstBody.appendChild(alert)
-  setTimeout(function (){
-    alert.remove();
-  },1000);
+//get todos
+function getTodosFromStorage(){
+  let todos;
+  if (localStorage.getItem("todos") === null) {
+    todos = [];
+  } else {
+    todos = JSON.parse(localStorage.getItem("todos"));
+  }
+  return todos;
 }
 
+//Add todo to storage
+function addStorage(todo) {
+  let todos = getTodosFromStorage();
+  todos.push(todo);
+  console.log(todos);
+  localStorage.setItem("todos", JSON.stringify(todos))
+}
