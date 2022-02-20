@@ -8,6 +8,17 @@ const clear = document.querySelector("#clear-todos");
 //
 //eventListeners
 form.addEventListener("submit", addTodo);
+printAllTodosFromStorage()
+// document.addEventListener("DOMContentLoaded", printAllTodosFromStorage);
+
+
+//Print all todos from storage
+function printAllTodosFromStorage() {
+  let todos = getTodosFromStorage();
+  todos.forEach(function (todo) {
+    addUI(todo);
+  });
+}
 
 //create todo
 function addTodo(e) {
@@ -16,7 +27,6 @@ function addTodo(e) {
   if (todo === "") {
     showAlert("danger", "Add any todo!");
   } else {
-    addUI(todo);
     addStorage(todo);
     showAlert("success", "Todo added successfully!");
   }
@@ -47,8 +57,8 @@ function addUI(todo) {
 }
 
 //get todos
-function getTodosFromStorage(){
-  let todos;
+function getTodosFromStorage() {
+  // let todos;
   if (localStorage.getItem("todos") === null) {
     todos = [];
   } else {
@@ -61,6 +71,5 @@ function getTodosFromStorage(){
 function addStorage(todo) {
   let todos = getTodosFromStorage();
   todos.push(todo);
-  console.log(todos);
-  localStorage.setItem("todos", JSON.stringify(todos))
+  localStorage.setItem("todos", JSON.stringify(todos));
 }
