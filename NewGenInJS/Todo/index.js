@@ -89,7 +89,7 @@ function deleteTodoFromStorage(deletetodo) {
   let todosLocal = getTodosFromStorage();
   todosLocal.forEach(function (todo, idx) {
     if (todo === deletetodo) {
-      todos.splice(idx, 1);
+      todosLocal.splice(idx, 1);
     }
   });
   localStorage.setItem(todos, JSON.stringify(todosLocal));
