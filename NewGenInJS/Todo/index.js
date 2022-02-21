@@ -1,3 +1,5 @@
+import { todos } from "./consts/todos.js";
+
 //select
 const form = document.querySelector("#todo-form");
 const input = document.querySelector("#todo");
@@ -52,28 +54,25 @@ function addUI(todo) {
   const link = document.createElement("a");
   link.classList = "delete-item";
   link.innerHTML = "<i class = 'fa fa-remove'></i>";
-  li.appendChild(document.createTextNode(todo));
-  li.appendChild(link);
+  li.append(document.createTextNode(todo), link);
   ul.appendChild(li);
   input.value = "";
 }
 
 //get todos
 function getTodosFromStorage() {
-  // let todos;
-  if (localStorage.getItem("todos") === null) {
-    todos = [];
-  } else {
-    todos = JSON.parse(localStorage.getItem("todos"));
+  if (!localStorage.getItem(todos)) {
+    return [];
   }
-  return todos;
+  return JSON.parse(localStorage.getItem(todos));
 }
 
 //Add todo to storage
 function addStorage(todo) {
-  let todos = getTodosFromStorage();
-  todos.push(todo);
-  localStorage.setItem("todos", JSON.stringify(todos));
+  console.log(todos);
+  let todosLocal = getTodosFromStorage();
+  todosLocal.push(todo);
+  localStorage.setItem(todos, JSON.stringify(todosLocal));
 }
 
 //Delete any todo
@@ -86,16 +85,52 @@ function deleteTodo(e) {
 }
 
 //delete todo from storage
-function deleteTodoFromStorage(deletetodo, index) {
-  let todos = getTodosFromStorage();
-
-  todos.forEach(function (todo) {
+function deleteTodoFromStorage(deletetodo) {
+  let todosLocal = getTodosFromStorage();
+  todosLocal.forEach(function (todo, idx) {
     if (todo === deletetodo) {
-      todos.splice(index, 1);
+      todos.splice(idx, 1);
     }
-
-
   });
-
-  localStorage.setItem("todos", JSON.stringify(todos));
+  localStorage.setItem(todos, JSON.stringify(todosLocal));
 }
+
+//filter todos
+filter.addEventListener("input", (e) => {
+  const inputValue = e.target.value.toLowerCase();
+  console.log(inputValue);
+  const lis = document.querySelectorAll(".list-group-item");
+  lis.forEach(function (li) {
+    const value = li.textContent.toLowerCase();
+    if (value.indexOf(inputValue) === -1) {
+      li.setAttribute("style", "display : none !important");
+    } else {
+      li.setAttribute("style", "display : block");
+    }
+  });
+});
+//if(value.includes(inputValue))
+
+// filter.addEventListener("keyup", e => {
+//   const inputValue = e.target.value
+//   console.log(inputValue);
+//   let todosLocal = getTodosFromStorage();
+//   todosLocal.forEach(idx => {
+//     const none = idx.includes(inputValue)
+
+//   })
+// })
+
+//clear
+clear.addEventListener("click", (e) => {
+  localStorage.clear();
+  ul.innerHTML = "";
+  showAlert("success", "All todos deleted successfully");
+  // if (ul.innerHTML === "") {
+  //   showAlert("dark", "silinecek todo yoxdur");
+  // } else {
+  //   localStorage.clear();
+  //   ul.innerHTML = "";
+  //   showAlert("success", "All todos deleted successfully");
+  // }
+});
