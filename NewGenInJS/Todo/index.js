@@ -4,6 +4,7 @@ import { todos } from "./consts/todos.js";
 const form = document.querySelector("#todo-form");
 const input = document.querySelector("#todo");
 const ul = document.querySelector(".list-group");
+const liIntoUl = document.querySelector(".list-group li");
 const firstBody = document.querySelectorAll(".card-body")[0];
 const secondBody = document.querySelectorAll(".card-body")[1];
 const filter = document.querySelector("#filter");
@@ -98,39 +99,27 @@ function deleteTodoFromStorage(deletetodo) {
 //filter todos
 filter.addEventListener("input", (e) => {
   const inputValue = e.target.value.toLowerCase();
-  console.log(inputValue);
   const lis = document.querySelectorAll(".list-group-item");
   lis.forEach(function (li) {
     const value = li.textContent.toLowerCase();
     if (value.indexOf(inputValue) === -1) {
       li.setAttribute("style", "display : none !important");
-    } else {
+    }
+    if (inputValue.trim() === "") {
       li.setAttribute("style", "display : block");
     }
   });
 });
-//if(value.includes(inputValue))
-
-// filter.addEventListener("keyup", e => {
-//   const inputValue = e.target.value
-//   console.log(inputValue);
-//   let todosLocal = getTodosFromStorage();
-//   todosLocal.forEach(idx => {
-//     const none = idx.includes(inputValue)
-
-//   })
-// })
+//value.includes(inputValue)
 
 //clear
 clear.addEventListener("click", (e) => {
-  localStorage.clear();
-  ul.innerHTML = "";
-  showAlert("success", "All todos deleted successfully");
-  // if (ul.innerHTML === "") {
-  //   showAlert("dark", "silinecek todo yoxdur");
-  // } else {
-  //   localStorage.clear();
-  //   ul.innerHTML = "";
-  //   showAlert("success", "All todos deleted successfully");
-  // }
+  e.preventDefault();
+  if (!liIntoUl) {
+    showAlert("dark", "There is no todo");
+  } else {
+    localStorage.clear();
+    ul.innerHTML = "";
+    showAlert("success", "All todos deleted successfully");
+  }
 });
